@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CloudNine.Praktik.Model;
 using CloudNine.Praktik.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,16 +14,20 @@ namespace CloudNine.Praktik.Controllers
     [ApiController]
     public class ProductColorsController : ControllerBase
     {
-        private readonly ProductDataLogic _productDataLogic;
-        public ProductColorsController(ProductDataLogic productDataLogic)
+        
+
+        private readonly IProductRepository productRepository;
+        public ProductColorsController(IProductRepository productRepository)
         {
-            this._productDataLogic = productDataLogic;
+            this.productRepository = productRepository;
         }
+       
         [HttpGet]
-        public async Task<List<string>> AllProductcolor()
-        {
-            List<string> colorlist = new List<string>();
-             colorlist=await  _productDataLogic.ProductColor();
+        public  List<string> AllProductcolor()
+        {         
+
+            List<string> colorlist = productRepository.GetProductsColor();
+          
             return colorlist;
         }
     }

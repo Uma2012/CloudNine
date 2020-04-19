@@ -19,40 +19,20 @@ namespace CloudNine.Praktik.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly ProductDataLogic _productDataLogic;
-        public ProductsController(ProductDataLogic productDataLogic)
+        private readonly IProductRepository productRepository;
+
+        public ProductsController(IProductRepository productRepository)
         {
-            this._productDataLogic = productDataLogic;
+            this.productRepository = productRepository;
         }
+
+
         // GET: api/products
         [HttpGet]
-        public async Task<List<Products>> GetAsync(int? page, int? pageSize,string color=null)
+        public  List<Products> GetAsync(int? page, int? pageSize,string color=null)
         {
             // TODO: Returnera alla produkter, ta hänsyn till pagineringsparametrar om sådana skickats in.
-
-            List<Products> allproducts = new List<Products>();
-
-            allproducts = await _productDataLogic.GetAll();
-
-
-            if ((page != null) && (pageSize != null) && (String.IsNullOrEmpty(color)))
-            {
-                return allproducts.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
-            }
-            if ((page != null) && (pageSize != null) && (!String.IsNullOrEmpty(color)))
-            {
-                var result = allproducts.Where(x => x.color == color)
-                .Select(x => new Products()
-                {
-                    id = x.id,
-                    color = x.color,
-                    description = x.description,
-                    productName = x.productName
-                })
-                .ToList();
-                return result.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
-            }
-
+            List<Products> allproducts = productRepository.ProductFilter(page, pageSize, color);            
 
             return allproducts;
         }
@@ -61,12 +41,12 @@ namespace CloudNine.Praktik.Controllers
         // GET: api/products/5
 
         [HttpGet("{id}")]
-        public async Task<Products> GetProductByIDAsync(Guid id)
+       public  Products GetProductByIDAsync(Guid id)
         {
-
-            var product = await _productDataLogic.ProductByID(id);
+            Products product = productRepository.GetProductById(id);
+          
             return product;
-        }
+         }
 
       
 

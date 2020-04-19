@@ -1,0 +1,110 @@
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+
+namespace CloudNine.Praktik.Model
+{
+    public class MockProductRepository : IProductRepository
+    {
+        private List<Products> _productList;
+        public MockProductRepository()
+        {
+           string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"Data\products.json");
+          
+            using (StreamReader r = new StreamReader(path))
+            {
+                string json = r.ReadToEnd();
+                _productList = JsonConvert.DeserializeObject<List<Products>>(json);
+            }           
+
+            _productList.OrderBy(x => x.color);
+           
+        }
+        //public List<Products> GetAllProducts()
+        //{
+        //    return _productList;
+          
+        //}
+        public Products GetProductById(Guid productid)
+        {            
+            var product = _productList.Where(x => x.id == productid)
+                .Select(x => new Products()
+                {
+                    id = x.id,
+                    color = x.color,
+                    description = x.description,
+                    productName = x.productName
+                })
+                .FirstOrDefault();           
+
+            return product;
+        }
+
+        public List<string> GetProductsColor()
+        {
+            List<string> output = new List<string>();
+
+            foreach (var item in _productList)
+            {
+                output.Add(item.color);
+
+            }
+
+            return output;
+        }
+
+        public List<Products> ProductFilter(int? page, int? pageSize, string color)
+        {
+           
+            //List<Products> result=new List<Products>();
+            //if (color.Length > 0)
+            //{
+            //    for (int i = 0; i < color.Length; i++)
+            //    {
+            //        //  colorList.Add(color[i]);
+            //        result = _productList.Where(x => x.color == color[i])
+            //    .Select(x => new Products()
+            //    {
+            //        id = x.id,
+            //        color = x.color,
+            //        description = x.description,
+            //        productName = x.productName
+            //    })
+            //    .ToList();
+
+            //    }
+            //        return result.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
+
+            //}
+
+
+
+
+
+
+
+            if ((page != null) && (pageSize != null) && (String.IsNullOrEmpty(color)))
+            {
+                return _productList.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
+            }
+            if ((page != null) && (pageSize != null) && (!String.IsNullOrEmpty(color)))
+            {
+                var result = _productList.Where(x => x.color.ToLower() == color.ToLower())
+                .Select(x => new Products()
+                {
+                    id = x.id,
+                    color = x.color,
+                    description = x.description,
+                    productName = x.productName
+                })
+                .ToList();
+                return result.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
+                }
+                return _productList;
+        }
+    }
+}

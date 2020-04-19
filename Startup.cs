@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CloudNine.Praktik.Model;
 using CloudNine.Praktik.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,7 +18,7 @@ namespace CloudNine.Praktik
         {
             services.AddControllers();
             services.AddTransient<ProductDataLogic>();
-            
+            services.AddSingleton<IProductRepository,MockProductRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
