@@ -10,7 +10,7 @@ namespace CloudNine.Praktik.Model
       //  List<Products> GetAllProducts();
         Products GetProductById(Guid productid);
         List<string> GetProductsColor();
-        List<Products> ProductFilter(int? page, int? pageSize, string color);
-       // List<Products> ProductFilter(int? page, int? pageSize, params string[] color);
+        //List<Products> ProductFilter(int? page, int? pageSize, string color);
+       List<Products> ProductFilter(int? page, int? pageSize, params string[] color);
     }
 }

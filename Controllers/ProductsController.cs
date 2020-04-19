@@ -29,7 +29,7 @@ namespace CloudNine.Praktik.Controllers
 
         // GET: api/products
         [HttpGet]
-        public  List<Products> GetAsync(int? page, int? pageSize,string color=null)
+        public  List<Products> GetAsync(int? page, int? pageSize, [FromQuery(Name = "color")]params string[] color)
         {
             // TODO: Returnera alla produkter, ta hänsyn till pagineringsparametrar om sådana skickats in.
             List<Products> allproducts = productRepository.ProductFilter(page, pageSize, color);            

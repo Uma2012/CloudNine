@@ -30,7 +30,7 @@ namespace CloudNine.Praktik.Model
           
         //}
         public Products GetProductById(Guid productid)
-        {            
+        {            //if contains
             var product = _productList.Where(x => x.id == productid)
                 .Select(x => new Products()
                 {
@@ -57,16 +57,18 @@ namespace CloudNine.Praktik.Model
             return output;
         }
 
-        public List<Products> ProductFilter(int? page, int? pageSize, string color)
+        public List<Products> ProductFilter(int? page, int? pageSize, params string[] color)
         {
-           
-            //List<Products> result=new List<Products>();
+
+            List<Products> result = new List<Products>();
+            List<Products> ListOfEvérycolor = new List<Products>();
+
             //if (color.Length > 0)
             //{
             //    for (int i = 0; i < color.Length; i++)
             //    {
-            //        //  colorList.Add(color[i]);
-            //        result = _productList.Where(x => x.color == color[i])
+            //        //color.Add(color[i]);
+            //        result = _productList.Where(x => x.color.ToLower() == color[i].ToLower())
             //    .Select(x => new Products()
             //    {
             //        id = x.id,
@@ -75,9 +77,9 @@ namespace CloudNine.Praktik.Model
             //        productName = x.productName
             //    })
             //    .ToList();
-
+            //        ListOfEvérycolor.AddRange(result);
             //    }
-            //        return result.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
+            //    return ListOfEvérycolor.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
 
             //}
 
@@ -87,13 +89,17 @@ namespace CloudNine.Praktik.Model
 
 
 
-            if ((page != null) && (pageSize != null) && (String.IsNullOrEmpty(color)))
+
+            if ((page != null) && (pageSize != null) && (color.Length==0))
             {
                 return _productList.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
             }
-            if ((page != null) && (pageSize != null) && (!String.IsNullOrEmpty(color)))
+            if ((page != null) && (pageSize != null) && (color.Length>0))
             {
-                var result = _productList.Where(x => x.color.ToLower() == color.ToLower())
+                for (int i = 0; i < color.Length; i++)
+                {
+                    //color.Add(color[i]);
+                    result = _productList.Where(x => x.color.ToLower() == color[i].ToLower())
                 .Select(x => new Products()
                 {
                     id = x.id,
@@ -102,9 +108,54 @@ namespace CloudNine.Praktik.Model
                     productName = x.productName
                 })
                 .ToList();
-                return result.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
+                    ListOfEvérycolor.AddRange(result);
                 }
-                return _productList;
+                return ListOfEvérycolor.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
+
+
+
+
+
+
+
+                //var result = _productList.Where(x => x.color.ToLower() == color.ToLower())
+                //.Select(x => new Products()
+                //{
+                //    id = x.id,
+                //    color = x.color,
+                //    description = x.description,
+                //    productName = x.productName
+                //})
+                //.ToList();
+                //return result.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
+            }
+
+
+
+
+
+
+
+
+
+            //if ((page != null) && (pageSize != null) && (String.IsNullOrEmpty(color)))
+            //{
+            //    return _productList.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
+            //}
+            //if ((page != null) && (pageSize != null) && (!String.IsNullOrEmpty(color)))
+            //{
+            //    var result = _productList.Where(x => x.color.ToLower() == color.ToLower())
+            //    .Select(x => new Products()
+            //    {
+            //        id = x.id,
+            //        color = x.color,
+            //        description = x.description,
+            //        productName = x.productName
+            //    })
+            //    .ToList();
+            //    return result.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
+            //}
+            return _productList;
         }
     }
 }
