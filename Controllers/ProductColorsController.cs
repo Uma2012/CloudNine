@@ -12,8 +12,7 @@ namespace CloudNine.Praktik.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class ProductColorsController : ControllerBase
-    {
-        
+    {       
 
         private readonly IProductRepository productRepository;
         public ProductColorsController(IProductRepository productRepository)

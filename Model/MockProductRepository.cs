@@ -107,8 +107,9 @@ namespace CloudNine.Praktik.Model
 
                 return ListOfEverycolor.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
             }
+           
 
-            //if no parameter is passed so return all products
+            //if no parameter is passed so returns all products
             return _productList;
 
         }
