@@ -20,13 +20,12 @@ namespace CloudNine.Praktik.Controllers
         {
             this.productRepository = productRepository;
         }
-       
+
+        // GET: api/productcolors
         [HttpGet]
         public  List<string> AllProductcolor()
-        {         
-
+        {        
             List<string> colorlist = productRepository.GetProductsColor();
-          
             return colorlist;
         }
     }
