@@ -24,24 +24,25 @@ namespace CloudNine.Praktik.Model
             _productList.OrderBy(x => x.color);
            
         }
-        //public List<Products> GetAllProducts()
-        //{
-        //    return _productList;
-          
-        //}
+       
         public Products GetProductById(Guid productid)
         {            //if contains
-            var product = _productList.Where(x => x.id == productid)
-                .Select(x => new Products()
-                {
-                    id = x.id,
-                    color = x.color,
-                    description = x.description,
-                    productName = x.productName
-                })
-                .FirstOrDefault();           
+           bool isContains= _productList.Any(x => x.id == productid);
+            //if (isContains)
+            //{
+                var product = _productList.Where(x => x.id == productid)
+                    .Select(x => new Products()
+                    {
+                        id = x.id,
+                        color = x.color,
+                        description = x.description,
+                        productName = x.productName
+                    })
+                    .FirstOrDefault();
 
-            return product;
+                return product;
+            //}
+           // return NotFound();
         }
 
         public List<string> GetProductsColor()
@@ -61,33 +62,7 @@ namespace CloudNine.Praktik.Model
         {
 
             List<Products> result = new List<Products>();
-            List<Products> ListOfEvérycolor = new List<Products>();
-
-            //if (color.Length > 0)
-            //{
-            //    for (int i = 0; i < color.Length; i++)
-            //    {
-            //        //color.Add(color[i]);
-            //        result = _productList.Where(x => x.color.ToLower() == color[i].ToLower())
-            //    .Select(x => new Products()
-            //    {
-            //        id = x.id,
-            //        color = x.color,
-            //        description = x.description,
-            //        productName = x.productName
-            //    })
-            //    .ToList();
-            //        ListOfEvérycolor.AddRange(result);
-            //    }
-            //    return ListOfEvérycolor.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
-
-            //}
-
-
-
-
-
-
+            List<Products> ListOfEvérycolor = new List<Products>();        
 
 
             if ((page != null) && (pageSize != null) && (color.Length==0))
@@ -97,8 +72,7 @@ namespace CloudNine.Praktik.Model
             if ((page != null) && (pageSize != null) && (color.Length>0))
             {
                 for (int i = 0; i < color.Length; i++)
-                {
-                    //color.Add(color[i]);
+                {                    
                     result = _productList.Where(x => x.color.ToLower() == color[i].ToLower())
                 .Select(x => new Products()
                 {
@@ -111,26 +85,10 @@ namespace CloudNine.Praktik.Model
                     ListOfEvérycolor.AddRange(result);
                 }
                 return ListOfEvérycolor.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
-
-
-
-
-
-
-
-                //var result = _productList.Where(x => x.color.ToLower() == color.ToLower())
-                //.Select(x => new Products()
-                //{
-                //    id = x.id,
-                //    color = x.color,
-                //    description = x.description,
-                //    productName = x.productName
-                //})
-                //.ToList();
-                //return result.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
+               
             }
 
-
+            return _productList;
 
 
 
@@ -155,7 +113,7 @@ namespace CloudNine.Praktik.Model
             //    .ToList();
             //    return result.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
             //}
-            return _productList;
+
         }
     }
 }
