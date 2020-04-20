@@ -26,11 +26,13 @@ namespace CloudNine.Praktik.Model
         }
        
         public Products GetProductById(Guid productid)
-        {            //if contains
-           bool isContains= _productList.Any(x => x.id == productid);
-            //if (isContains)
-            //{
-                var product = _productList.Where(x => x.id == productid)
+        {
+            Products product=null;  
+          
+            if (_productList.Any(x => x.id == productid))
+            {
+                
+                 product = _productList.Where(x => x.id == productid)
                     .Select(x => new Products()
                     {
                         id = x.id,
@@ -39,21 +41,17 @@ namespace CloudNine.Praktik.Model
                         productName = x.productName
                     })
                     .FirstOrDefault();
-
-                return product;
-            //}
-           // return NotFound();
+                
+            }           
+            
+            return product;
         }
 
         public List<string> GetProductsColor()
         {
             List<string> output = new List<string>();
 
-            foreach (var item in _productList)
-            {
-                output.Add(item.color);
-
-            }
+          output=  _productList.Select(x => x.color).Distinct().ToList();
 
             return output;
         }
@@ -62,7 +60,7 @@ namespace CloudNine.Praktik.Model
         {
 
             List<Products> result = new List<Products>();
-            List<Products> ListOfEvérycolor = new List<Products>();        
+            List<Products> ListOfEverycolor = new List<Products>();        
 
 
             if ((page != null) && (pageSize != null) && (color.Length==0))
@@ -82,37 +80,14 @@ namespace CloudNine.Praktik.Model
                     productName = x.productName
                 })
                 .ToList();
-                    ListOfEvérycolor.AddRange(result);
+                    ListOfEverycolor.AddRange(result);
                 }
-                return ListOfEvérycolor.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
+                return ListOfEverycolor.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
                
             }
 
             return _productList;
-
-
-
-
-
-
-
-            //if ((page != null) && (pageSize != null) && (String.IsNullOrEmpty(color)))
-            //{
-            //    return _productList.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
-            //}
-            //if ((page != null) && (pageSize != null) && (!String.IsNullOrEmpty(color)))
-            //{
-            //    var result = _productList.Where(x => x.color.ToLower() == color.ToLower())
-            //    .Select(x => new Products()
-            //    {
-            //        id = x.id,
-            //        color = x.color,
-            //        description = x.description,
-            //        productName = x.productName
-            //    })
-            //    .ToList();
-            //    return result.Skip(((int)page - 1) * (int)pageSize).Take((int)pageSize).ToList();
-            //}
+            
 
         }
     }
